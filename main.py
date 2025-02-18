@@ -89,7 +89,7 @@ async def crawl(request: CrawlRequest):
                     "site_name": result.metadata.get("og:site_name"),
                     "author": result.metadata.get("author"),
                     "keywords": result.metadata.get("keywords"),
-                    "markdown": result.markdown_v2.raw_markdown,
+                    "raw_markdown": result.markdown_v2.raw_markdown,
                 }
 
         except Exception as ex:
