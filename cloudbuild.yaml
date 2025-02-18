@@ -1,11 +1,11 @@
 steps:
   # Docker build
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-west1-docker.pkg.dev/primer-450212/primer-repository/primer-webscraper', '.']
+    args: ['build', '-t', 'us-west2-docker.pkg.dev/primer-450212/primer-repository/primer-webscraper', '.']
 
   # Docker push
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-west1-docker.pkg.dev/primer-450212/primer-repository/primer-webscraper']
+    args: ['push', 'us-west2-docker.pkg.dev/primer-450212/primer-repository/primer-webscraper']
 
 options:
   logging: CLOUD_LOGGING_ONLY
