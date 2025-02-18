@@ -1,6 +1,8 @@
+import os
 import time
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends, Security
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
 from crawl4ai import (
@@ -9,7 +11,17 @@ from crawl4ai import (
     CacheMode
 )
 
-app = FastAPI()
+app = FastAPI(title="Primer Webscraper API")
+
+# API token security
+security = HTTPBearer()
+PRIMER_API_TOKEN=os.getenv("PRIMER_API_TOKEN")
+
+def verify_auth(credentials: HTTPAuthorizationCredentials = Security(security)):
+    # Verify if the token is valid
+    if credentials.scheme.lower() != "bearer" or credentials.credentials != PRIMER_API_TOKEN:
+        raise HTTPException(status_code=401, detail="Invalid or missing token")
+    return True
 
 
 class CrawlRequest(BaseModel):
@@ -17,10 +29,8 @@ class CrawlRequest(BaseModel):
     browser_config: Optional[Dict[str, Any]] = None
     crawler_config: Optional[Dict[str, Any]] = None
 
-
-@app.post("/crawl")
+@app.post("/crawl", dependencies=[Depends(verify_auth)])
 async def crawl(request: CrawlRequest):
-    # Default browser configuration
     browser_config = BrowserConfig(
         verbose=request.browser_config.get("verbose", True),
         headless=request.browser_config.get("headless", False),
