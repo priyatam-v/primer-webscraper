@@ -31,7 +31,7 @@ class CrawlRequest(BaseModel):
 
 @app.get("/health")
 async def health_check():
-    return { "status": "Primer Webscraper service is running" }
+    return { "status": "Service is running!" }
 
 @app.post("/crawl", dependencies=[Depends(verify_auth)])
 async def crawl(request: CrawlRequest):
