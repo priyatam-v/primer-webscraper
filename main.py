@@ -29,6 +29,10 @@ class CrawlRequest(BaseModel):
     browser_config: Optional[Dict[str, Any]] = None
     crawler_config: Optional[Dict[str, Any]] = None
 
+@app.get("/health")
+async def health_check():
+    return { "status": "ok" }
+
 @app.post("/crawl", dependencies=[Depends(verify_auth)])
 async def crawl(request: CrawlRequest):
     browser_config = BrowserConfig(
