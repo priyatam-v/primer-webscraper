@@ -72,6 +72,7 @@ async def crawl(request: CrawlRequest):
         exclude_social_media_links=crawler_config.get("exclude_social_media_links", True),
         exclude_external_images=crawler_config.get("exclude_external_images", True),
         remove_overlay_elements=crawler_config.get("remove_overlay_elements", True),
+        page_timeout=crawler_config.get("page_timeout", 180000),
         content_filter=prune_filter,
         markdown_generator=md_generator,
     )
@@ -112,6 +113,7 @@ async def crawl(request: CrawlRequest):
                 print(f"Failed to scrape {request.url} after {max_retries} attempts")
                 return {
                     "success": False,
+                    "message": ex,
                     "content": None
                 }
             print(f"Waiting for service to start (attempt {i + 1}/{max_retries})...")
